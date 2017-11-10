@@ -4664,7 +4664,6 @@ addNetwork({
     alias: 'regtest',
     prefix: 'y',
     txtimestamp: true,
-    skipSignTime: true,
     algorithm: "scrypt",
     pubkeyhash: 0x6f,
     privatekey: 0xef,
