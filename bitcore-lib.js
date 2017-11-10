@@ -4638,7 +4638,7 @@ addNetwork({
     shortName: 'YNG',
     prefix: 'Y',
     txtimestamp: true,
-    skipSignTime: true,
+    algorithm: "scrypt",
     pubkeyhash: 0x4e,
     privatekey: 0x8c,
     scripthash: 0xcc,
@@ -4647,7 +4647,7 @@ addNetwork({
     networkMagic: 0x59414e47,
     port: 23001,
     dnsSeeds: [
-        'chain001.bitchk.com'
+        'yng001.bitchk.com'
     ]
 });
 
@@ -4665,6 +4665,7 @@ addNetwork({
     prefix: 'y',
     txtimestamp: true,
     skipSignTime: true,
+    algorithm: "scrypt",
     pubkeyhash: 0x6f,
     privatekey: 0xef,
     scripthash: 0xc4,
@@ -9398,6 +9399,8 @@ var buffer = require('buffer');
 var compare = Buffer.compare || require('buffer-compare');
 
 var errors = require('../errors');
+var Networks = require('../networks');
+
 var BufferUtil = require('../util/buffer');
 var JSUtil = require('../util/js');
 var BufferReader = require('../encoding/bufferreader');
@@ -9432,7 +9435,12 @@ function Transaction(serialized, network) {
     this.outputs = [];
     this._inputAmount = undefined;
     this._outputAmount = undefined;
-    this.network = network;
+    if (network)
+        this.network = network;
+    else
+        this.network = Networks.lievnet;
+
+
     if (serialized) {
         if (serialized instanceof Transaction) {
             return Transaction.shallowCopy(serialized);
@@ -9701,10 +9709,16 @@ Transaction.prototype.fromBuffer = function(buffer) {
 Transaction.prototype.fromBufferReader = function(reader) {
     $.checkArgument(!reader.finished(), 'No transaction data received');
     var i, sizeTxIns, sizeTxOuts;
-
+    if (!this.network) {
+        console.log("TODO check network...");
+        this.network = Networks.livenet;
+    }
     this.version = reader.readInt32LE();
-    if (this.network && this.network.txtimestamp)
+    if (this.network && this.network.txtimestamp) {
         this.ntime = reader.readUInt32LE();
+    } else {
+        console.log("no networks.... ");
+    }
     sizeTxIns = reader.readVarintNum();
     for (i = 0; i < sizeTxIns; i++) {
         var input = Input.fromBufferReader(reader);
@@ -10639,7 +10653,7 @@ Transaction.prototype.enableRBF = function() {
 
 module.exports = Transaction;
 }).call(this,require("buffer").Buffer)
-},{"../address":1,"../crypto/bn":6,"../crypto/hash":8,"../crypto/signature":11,"../encoding/bufferreader":14,"../encoding/bufferwriter":15,"../errors":17,"../privatekey":23,"../script":25,"../util/buffer":42,"../util/js":43,"../util/preconditions":44,"./input":29,"./output":35,"./sighash":36,"./unspentoutput":39,"buffer":114,"buffer-compare":112,"lodash":188}],39:[function(require,module,exports){
+},{"../address":1,"../crypto/bn":6,"../crypto/hash":8,"../crypto/signature":11,"../encoding/bufferreader":14,"../encoding/bufferwriter":15,"../errors":17,"../networks":21,"../privatekey":23,"../script":25,"../util/buffer":42,"../util/js":43,"../util/preconditions":44,"./input":29,"./output":35,"./sighash":36,"./unspentoutput":39,"buffer":114,"buffer-compare":112,"lodash":188}],39:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -54414,14 +54428,12 @@ module.exports={
         "lint": "gulp lint",
         "test": "gulp test",
         "coverage": "gulp coverage",
-        "build": "gulp"
+        "build": "gulp browser"
     },
-    "contributors": [
-        {
-            "name": "Daniel Cousens",
-            "email": "bitcoin@dcousens.com"
-        }
-    ],
+    "contributors": [{
+        "name": "Daniel Cousens",
+        "email": "bitcoin@dcousens.com"
+    }],
     "keywords": [
         "bitcoin",
         "transaction",
@@ -54463,7 +54475,6 @@ module.exports={
     },
     "license": "MIT"
 }
-
 },{}],"bitcore-lib":[function(require,module,exports){
 (function (global,Buffer){
 'use strict';
@@ -54473,12 +54484,13 @@ var bitcore = module.exports;
 // module information
 bitcore.version = 'v' + require('./package.json').version;
 bitcore.versionGuard = function(version) {
-  if (version !== undefined) {
-    var message = 'More than one instance of bitcore-lib found. ' +
-      'Please make sure to require bitcore-lib and check that submodules do' +
-      ' not also include their own bitcore-lib dependency.';
-    throw new Error(message);
-  }
+    if (version !== undefined) {
+        var message = 'More than one instance of bitcore-lib found. ' +
+            'Please make sure to require bitcore-lib and check that submodules do' +
+            ' not also include their own bitcore-lib dependency.';
+        //TODO check error
+        //throw new Error(message);
+    }
 };
 bitcore.versionGuard(global._bitcore);
 global._bitcore = bitcore.version;
@@ -54535,6 +54547,5 @@ bitcore.deps._ = require('lodash');
 
 // Internal usage, exposed for testing/advanced tweaking
 bitcore.Transaction.sighash = require('./lib/transaction/sighash');
-
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
 },{"./lib/address":1,"./lib/block":4,"./lib/block/blockheader":3,"./lib/block/merkleblock":5,"./lib/crypto/bn":6,"./lib/crypto/ecdsa":7,"./lib/crypto/hash":8,"./lib/crypto/point":9,"./lib/crypto/random":10,"./lib/crypto/signature":11,"./lib/encoding/base58":12,"./lib/encoding/base58check":13,"./lib/encoding/bufferreader":14,"./lib/encoding/bufferwriter":15,"./lib/encoding/varint":16,"./lib/errors":17,"./lib/hdprivatekey.js":19,"./lib/hdpublickey.js":20,"./lib/networks":21,"./lib/opcode":22,"./lib/privatekey":23,"./lib/publickey":24,"./lib/script":25,"./lib/transaction":28,"./lib/transaction/sighash":36,"./lib/unit":40,"./lib/uri":41,"./lib/util/buffer":42,"./lib/util/js":43,"./lib/util/preconditions":44,"./package.json":253,"bn.js":62,"bs58":111,"buffer":114,"elliptic":152,"lodash":188}]},{},[]);
