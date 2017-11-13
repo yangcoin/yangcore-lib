@@ -4651,7 +4651,7 @@ addNetwork({
         'yng001.bitchk.com'
     ],
     blockreward: function(height) {
-        return 10;
+        return 50;
     }
 });
 
