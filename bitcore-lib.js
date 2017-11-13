@@ -4577,6 +4577,7 @@ function addNetwork(data) {
         skipSignTime: data.skipSignTime,
         prefix: data.prefix,
         url: data.url,
+        blockreward: data.blockreward,
         xpubkey: data.xpubkey,
         xprivkey: data.xprivkey
     });
@@ -4648,7 +4649,10 @@ addNetwork({
     port: 23001,
     dnsSeeds: [
         'yng001.bitchk.com'
-    ]
+    ],
+    blockreward: function(height) {
+        return 10;
+    }
 });
 
 
@@ -9186,8 +9190,7 @@ var sighash = function sighash(transaction, sighashType, inputNumber, subscript)
         throw new Error("no network !!!");
     }
     var skipSignTime = transaction.network.skipSignTime;
-    if (!skipSignTime)
-        console.log("skip sign");
+
 
     // Copy transaction
     var txcopy = Transaction.shallowCopy(transaction);
