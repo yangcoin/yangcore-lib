@@ -4649,10 +4649,7 @@ addNetwork({
     port: 23001,
     dnsSeeds: [
         'yng001.bitchk.com'
-    ],
-    blockreward: function(height) {
-        return 50;
-    }
+    ]
 });
 
 
