@@ -1391,7 +1391,12 @@ BN.Minus1 = new BN(-1);
 
 BN.fromNumber = function(n) {
   $.checkArgument(_.isNumber(n));
-  return new BN(n);
+  $.checkArgument(_.isNumber(n));
+  if (n >= 0x20000000000000) {
+    return BN.fromString('' + n, 10);
+  } else {
+    return new BN(n);
+  }
 };
 
 BN.fromString = function(str, base) {
@@ -9058,9 +9063,9 @@ Object.defineProperty(Output.prototype, 'satoshis', {
 });
 
 Output.prototype.invalidSatoshis = function() {
-  if (this._satoshis > MAX_SAFE_INTEGER) {
-    return 'transaction txout satoshis greater than max safe integer';
-  }
+  // if (this._satoshis > MAX_SAFE_INTEGER) {
+  //   return 'transaction txout satoshis greater than max safe integer';
+  // }
   if (this._satoshis !== this._satoshisBN.toNumber()) {
     return 'transaction txout satoshis has corrupted value';
   }
