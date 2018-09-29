@@ -1,9 +1,9 @@
 {
     "name": "bitcore-lib",
-    "version": "0.14.0",
+    "version": "0.14.1",
     "description": "A pure and powerful JavaScript Bitcoin library for bitChk-wallet.",
     "author": "BitPay <dev@bitpay.com>",
-    "support": "support@bitchk.com",
+    "support": "dev@yangchigi.com",
     "main": "index.js",
     "scripts": {
         "lint": "gulp lint",
@@ -11,10 +11,12 @@
         "coverage": "gulp coverage",
         "build": "gulp browser"
     },
-    "contributors": [{
-        "name": "Daniel Cousens",
-        "email": "bitcoin@dcousens.com"
-    }],
+    "contributors": [
+        {
+            "name": "jhkim",
+            "email": "yangchigi@yangchigi.com"
+        }
+    ],
     "keywords": [
         "bitcoin",
         "transaction",
@@ -33,7 +35,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/yangcoin/bitcore-lib.git"
+        "url": "https://github.com/yangcoin/yangcore-lib.git"
     },
     "browser": {
         "request": "browser-request"
