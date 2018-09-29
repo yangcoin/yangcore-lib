@@ -862,6 +862,7 @@ BlockHeader._fromObject = function _fromObject(data) {
     var merkleRoot = data.merkleRoot;
     var vchBlockSig = data.vchBlockSig;
     var prevOutStakeHash = data.prevOutStakeHash;
+    
     if (_.isString(data.prevHash)) {
         prevHash = BufferUtil.reverse(new Buffer(data.prevHash, 'hex'));
     }
@@ -1011,9 +1012,8 @@ BlockHeader.prototype.toBufferWriter = function toBufferWriter(bw) {
     bw.writeUInt32LE(this.time);
     bw.writeUInt32LE(this.bits);
     bw.writeUInt32LE(this.nonce);
-    bw.write(this.prevOutStakeHash);
-    
     if(this.version&VERSION_SIG) { 
+        bw.write(this.prevOutStakeHash);
         bw.writeUInt32LE(this.prevOutStakeN);
         bw.writeVarintNum(this.vchBlockSig.length);
         bw.write(this.vchBlockSig);
