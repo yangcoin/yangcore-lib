@@ -644,7 +644,6 @@ Block.fromRawBlock = function fromRawBlock(data) {
  */
 Block.prototype.toObject = Block.prototype.toJSON = function toObject() {
   var transactions = [];
-  console.log("block.toObject" , this.transactions);
   this.transactions.forEach(function(tx) {
     transactions.push(tx.toObject());
   });
@@ -953,7 +952,6 @@ BlockHeader._fromBufferReader = function _fromBufferReader(br) {
         info.prevOutStakeN = br.readUInt32LE();
         var num = br.readVarintNum();
         info.vchBlockSig = br.read(num);
-        console.log("is sigblock..." ,info);
     }
     return info;
 };
